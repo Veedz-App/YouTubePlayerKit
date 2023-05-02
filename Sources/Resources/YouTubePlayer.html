@@ -66,8 +66,6 @@
         
         function retrieveVideoTagElement() {
             try {
-                var qPlayer = document.getElementById('player');
-                var innerDocument = qPlayer.contentWindow.document;
                 video = innerDocument.getElementsByClassName('html5-main-video')[0];
                 video.crossOrigin = "anonymous";
                 alert("Succeeded to retrieve video");
