@@ -45,6 +45,7 @@
     <script>
         // The YouTube Player instance
         var player;
+        var video;
 
         // Configure YouTube Player
         window.YT.ready(() => {
@@ -62,6 +63,35 @@
             // Send onIframeAPIReady event
             sendYouTubePlayerEvent('onIframeAPIReady');
         });
+        
+        function retrieveVideoTagElement() {
+            try {
+                var qPlayer = document.getElementById('player');
+                var innerDocument = qPlayer.contentWindow.document;
+                video = innerDocument.getElementsByClassName('html5-main-video')[0];
+                video.crossOrigin = "anonymous";
+                alert("Succeeded to retrieve video");
+            } catch(error) {
+                alert("Failed to retrieve video");
+            }
+        }
+        
+        function takeScreenshot() {
+            try{
+                if(video.tagName == 'VIDEO') {
+                    var canvas = document.createElement("canvas");
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                    var data = canvas.toDataURL("image/jpeg", 0.9).split(';base64,')[1];
+                    alert("Succeeded to take screenshot");
+                    return data;
+                }
+            } catch(error) {
+                alert("Failed to take screenshot");
+                return null;
+            }
+        }
 
         // Set YouTubePlayer Size
         function setYouTubePlayerSize(width, height) {
@@ -88,6 +118,7 @@
         function onReady(event) {
             // Send onReady event
             sendYouTubePlayerEvent('onReady');
+            retrieveVideoTagElement();
         }
 
         // YouTube Player onStateChange event callback

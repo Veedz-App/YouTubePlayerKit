@@ -84,6 +84,18 @@ public final class YouTubePlayer: ObservableObject {
         self.source = source
         self.configuration = configuration
     }
+
+    /// Retrieve the elapsed time in seconds since the video started playing
+    /// - Parameter completion: The completion closure
+    public func takeScreenshot(
+        completion: @escaping (Result<String, YouTubePlayerAPIError>) -> Void
+    ) {
+        self.webView.evaluate(
+            javaScript: YouTubePlayerWebView.JavaScript("takeScreenshot()"),
+            converter: .typeCast(),
+            completion: completion
+        )
+    }
     
 }
 
