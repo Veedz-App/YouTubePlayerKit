@@ -37,6 +37,7 @@
     <div class="embed-container">
         <div id="player"></div>
     </div>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <!-- YouTube iFrame JS API -->
     <script src="https://www.youtube.com/iframe_api"
         onerror="window.location.href='youtubeplayer://onIframeAPIFailedToLoad">
@@ -74,21 +75,15 @@
         // }
         
         function takeScreenshot() {
-            var canvas = document.createElement('canvas');
-            var ctx = canvas.getContext('2d');
-            var screenshot = document.createElement('screenshot');
-            // var video = document.querySelector('video');
-            
-            try {
-                var captureStream = await navigator.mediaDevices.getDisplayMedia();
-                screenshot.srcObject = captureStream;
-                context.drawImage(screenshot, 0, 0, window.width, window.height);
-                var data = canvas.toDataURL('image/jpeg');
-                captureStream.getTracks().forEach(track => track.stop());
-                return data;
-            } catch (err) {
-                return err;
-            }
+           const iframe = document.getElementsByTagName('iframe');
+           //  const screen = iframe[0]?.contentDocument?.body;
+           
+             html2canvas(iframe)
+               .then((canvas) => {
+                 const base64image = canvas.toDataURL('image/jpeg');
+           
+                return base64image;
+             });
             
            // video = document.getElementById('player');
            //  // var innerDocument = qPlayer.contentWindow.document;
