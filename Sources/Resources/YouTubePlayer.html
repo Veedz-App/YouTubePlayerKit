@@ -45,7 +45,6 @@
     <script>
         // The YouTube Player instance
         var player;
-        var video;
 
         // Configure YouTube Player
         window.YT.ready(() => {
@@ -76,24 +75,35 @@
         
         function takeScreenshot() {
             var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var screenshot = document.createElement('screenshot');
             // var video = document.querySelector('video');
             
-           video = document.getElementById('player');
-            // var innerDocument = qPlayer.contentWindow.document;
-            //video = innerDocument.querySelector('video');//getElementsByClassName('html5-main-video')[0];
-            // video.crossOrigin = "anonymous";
+            try {
+                var captureStream = await navigator.mediaDevices.getDisplayMedia();
+                screenshot.srcObject = captureStream;
+                context.drawImage(screenshot, 0, 0, window.width, window.height);
+                var data = canvas.toDataURL('image/jpeg');
+                captureStream.getTracks().forEach(track => track.stop());
+                return data;
+            } catch (err) {
+                // console.error("Error: " + err);
+                return err;
+            }
             
-            
-            var ctx = canvas.getContext('2d');
-            
-            // Change the size here
-            canvas.width = parseInt(video.width);
-            canvas.height = parseInt(video.height);
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Won't work on file:/// URLs. SecurityError: Tainted canvases may not be exported.
-            var base64ImageData = canvas.toDataURL('image/jpeg');
-            return base64ImageData;
+           // video = document.getElementById('player');
+           //  // var innerDocument = qPlayer.contentWindow.document;
+           //  //video = innerDocument.querySelector('video');//getElementsByClassName('html5-main-video')[0];
+           //  // video.crossOrigin = "anonymous";
+           //  
+           //  // Change the size here
+           //  canvas.width = parseInt(video.width);
+           //  canvas.height = parseInt(video.height);
+           //  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+           //  
+           //  // Won't work on file:/// URLs. SecurityError: Tainted canvases may not be exported.
+           //  var base64ImageData = canvas.toDataURL('image/jpeg');
+           //  return base64ImageData;
             // try{
             //     if(video.tagName == 'VIDEO') {
             //         var canvas = document.createElement("canvas");
